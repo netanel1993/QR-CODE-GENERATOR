@@ -31,9 +31,14 @@
     window.bgColor = localStorage.getItem('qr_bg') || "#ffffff";
 
     if (qrText) {
+      let count = parseInt(localStorage.getItem('qr_total') || '0');
+      count++;
+      localStorage.setItem('qr_total', count);
+
       localStorage.setItem('qr_text', qrText);
       localStorage.setItem('qr_color', qrColor);
       localStorage.setItem('qr_bg', bgColor);
+
       new QRCode(document.getElementById("qrcode"), {
         text: qrText,
         width: 256,
@@ -52,17 +57,20 @@
     <p>QR אחרון: <span id="statText"></span></p>
     <p>צבע קוד: <span id="statColor"></span></p>
     <p>רקע: <span id="statBg"></span></p>
+    <p>סה"כ QR שנוצרו: <span id="statTotal"></span></p>
   </div>
   <script>
     function showStats() {
       const qrText = localStorage.getItem('qr_text') || 'אין';
       const qrColor = localStorage.getItem('qr_color') || '#000000';
       const bgColor = localStorage.getItem('qr_bg') || '#ffffff';
+      const qrTotal = localStorage.getItem('qr_total') || '0';
 
       document.getElementById('stats').style.display = 'block';
       document.getElementById('statText').innerText = qrText;
       document.getElementById('statColor').innerText = qrColor;
       document.getElementById('statBg').innerText = bgColor;
+      document.getElementById('statTotal').innerText = qrTotal;
     }
   </script>
 </body>
