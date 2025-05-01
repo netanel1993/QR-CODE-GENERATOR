@@ -3,7 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <title>מחולל QR קוד עם לוגו</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">function previewQR() {
+  const qrCanvas = document.querySelector('#qrcode canvas');
+  const logoImg = document.getElementById("logo");
+  if (!qrCanvas) return alert("אנא צור קוד QR קודם");
+
+  const canvas = document.createElement('canvas');
+  canvas.width = qrCanvas.width;
+  canvas.height = qrCanvas.height;
+  const ctx = canvas.getContext('2d');
+
+  ctx.drawImage(qrCanvas, 0, 0);
+
+  if (logoImg.src && logoImg.style.display !== "none") {
+    const logoSize = 50;
+    const x = (canvas.width - logoSize) / 2;
+    const y = (canvas.height - logoSize) / 2;
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      ctx.drawImage(img, x, y, logoSize, logoSize);
+      const imageWithLogo = canvas.toDataURL("image/png");
+      const w = window.open();
+      w.document.write('<img src="' + imageWithLogo + '" alt="תצוגה מקדימה של QR">');
+    };
+    img.src = logoImg.src;
+  } else {
+    const image = qrCanvas.toDataURL("image/png");
+    const w = window.open();
+    w.document.write('<img src="' + image + '" alt="תצוגה מקדימה של QR">');
+  }
+}
+
+</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
@@ -36,6 +68,9 @@
       height: 50px;
       display: none;
       pointer-events: none;
+    }
+    #upload-logo {
+      display: none;
     }
     #g_id_onload, .g_id_signin {
       margin: 10px;
@@ -82,12 +117,14 @@
 
   <div id="app" style="display:none;">
     <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
-    <a href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA" target="_blank" onclick="addLogo()">הוסף לוגו (9.90 ש"ח דרך PayPal)</a>
+    <a href="#" onclick="enableLogoUpload(); alert('תשלום בדיקה הושלם!');">הוסף לוגו (בדיקה ב־0 ש"ח)</a>
     <button onclick="generateQR()">צור קוד QR</button>
-    <button onclick="downloadQR()">הורד קוד QR</button>
+    <button onclick="previewQR()">תצוגה מקדימה</button>
+    
+    <input type="file" id="upload-logo" accept="image/*" onchange="handleLogoUpload(event)">
 
     <div id="qrcode">
-      <img id="logo" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo">
+      <img id="logo" src="" alt="Logo">
     </div>
   </div>
 
@@ -144,27 +181,66 @@
       });
     }
 
-    function addLogo() {
+    function enableLogoUpload() {
       const user = localStorage.getItem("user");
       if (!user) {
         alert("יש להתחבר לפני רכישת לוגו");
         return;
       }
-      setTimeout(() => {
-        const logo = document.getElementById("logo");
-        logo.style.display = "block";
-      }, 2000);
+      document.getElementById("upload-logo").style.display = "block";
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const logoImg = document.getElementById("logo");
+          logoImg.src = e.target.result;
+          logoImg.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     function downloadQR() {
-      const qrCanvas = document.querySelector('#qrcode canvas');
-      if (!qrCanvas) return alert("אנא צור קוד QR קודם");
-      const image = qrCanvas.toDataURL("image/png");
+  const qrCanvas = document.querySelector('#qrcode canvas');
+  const logoImg = document.getElementById("logo");
+  if (!qrCanvas) return alert("אנא צור קוד QR קודם");
+
+  const canvas = document.createElement('canvas');
+  canvas.width = qrCanvas.width;
+  canvas.height = qrCanvas.height;
+  const ctx = canvas.getContext('2d');
+
+  // צייר את ה-QR
+  ctx.drawImage(qrCanvas, 0, 0);
+
+  // הוסף לוגו אם מופיע
+  if (logoImg.src && logoImg.style.display !== "none") {
+    const logoSize = 50;
+    const x = (canvas.width - logoSize) / 2;
+    const y = (canvas.height - logoSize) / 2;
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      ctx.drawImage(img, x, y, logoSize, logoSize);
+      const imageWithLogo = canvas.toDataURL("image/png");
       const link = document.createElement('a');
-      link.href = image;
-      link.download = 'qrcode.png';
+      link.href = imageWithLogo;
+      link.download = 'qrcode_with_logo.png';
       link.click();
-    }
+    };
+    img.src = logoImg.src;
+  } else {
+    // הורדה רגילה ללא לוגו
+    const image = qrCanvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'qrcode.png';
+    link.click();
+  }
+}
   </script>
 
 </body>
