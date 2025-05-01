@@ -40,6 +40,11 @@
     #g_id_onload, .g_id_signin {
       margin: 10px;
     }
+    #manual-login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
@@ -56,12 +61,18 @@
          data-auto_prompt="false">
     </div>
     <div class="g_id_signin" data-type="standard"></div>
+
+    <div id="manual-login">
+      <input type="email" id="email" placeholder="אימייל" required>
+      <input type="password" id="password" placeholder="סיסמה" required>
+      <button onclick="manualLogin()">התחבר / הירשם</button>
+    </div>
   </div>
 
   <div id="app" style="display:none;">
     <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
-    <button onclick="generateQR()">צור קוד QR</button>
     <a href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA" target="_blank" onclick="addLogo()">הוסף לוגו (9.90 ש"ח דרך PayPal)</a>
+    <button onclick="generateQR()">צור קוד QR</button>
     <button onclick="downloadQR()">הורד קוד QR</button>
 
     <div id="qrcode">
@@ -73,10 +84,24 @@
     let qrCode;
 
     function handleCredentialResponse(response) {
-      // תוכל לשמור את הטוקן או להציג שם משתמש בעתיד
+      localStorage.setItem("user", JSON.stringify({ google: true, token: response.credential }));
+      showApp();
+    }
+
+    function manualLogin() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      if (email && password) {
+        localStorage.setItem("user", JSON.stringify({ email: email }));
+        showApp();
+      } else {
+        alert("אנא הזן אימייל וסיסמה");
+      }
+    }
+
+    function showApp() {
       document.getElementById("login-section").style.display = "none";
       document.getElementById("app").style.display = "block";
-      console.log("Logged in with Google ID Token:", response.credential);
     }
 
     function generateQR() {
@@ -93,6 +118,11 @@
     }
 
     function addLogo() {
+      const user = localStorage.getItem("user");
+      if (!user) {
+        alert("יש להתחבר לפני רכישת לוגו");
+        return;
+      }
       setTimeout(() => {
         const logo = document.getElementById("logo");
         logo.style.display = "block";
