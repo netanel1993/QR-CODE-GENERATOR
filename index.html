@@ -196,9 +196,8 @@
     reader.readAsDataURL(file);
   }
 }
-    }
 
-    function downloadQR() {
+function downloadQR() {
   const qrCanvas = document.querySelector('#qrcode canvas');
   const logoImg = document.getElementById("logo");
   if (!qrCanvas) return alert("אנא צור קוד QR קודם");
