@@ -30,14 +30,17 @@
     window.qrColor = localStorage.getItem('qr_color') || "#000000";
     window.bgColor = localStorage.getItem('qr_bg') || "#ffffff";
 
-    if (text) {
+    if (qrText) {
+      localStorage.setItem('qr_text', qrText);
+      localStorage.setItem('qr_color', qrColor);
+      localStorage.setItem('qr_bg', bgColor);
       new QRCode(document.getElementById("qrcode"), {
-      text: qrText,
-      width: 256,
-      height: 256,
-      colorDark: qrColor,
-      colorLight: bgColor
-    });
+        text: qrText,
+        width: 256,
+        height: 256,
+        colorDark: qrColor,
+        colorLight: bgColor
+      });
     } else {
       document.body.innerHTML = "<h3>לא נמצא QR שנשמר</h3>";
     }
@@ -52,8 +55,12 @@
   </div>
   <script>
     function showStats() {
+      const qrText = localStorage.getItem('qr_text') || 'אין';
+      const qrColor = localStorage.getItem('qr_color') || '#000000';
+      const bgColor = localStorage.getItem('qr_bg') || '#ffffff';
+
       document.getElementById('stats').style.display = 'block';
-      document.getElementById('statText').innerText = qrText || 'אין';
+      document.getElementById('statText').innerText = qrText;
       document.getElementById('statColor').innerText = qrColor;
       document.getElementById('statBg').innerText = bgColor;
     }
