@@ -125,6 +125,13 @@
   const box = document.getElementById("local-email");
   box.textContent = msg;
   box.style.display = "block";
+}
+סיסמה: ${password}
+
+אנא צלם מסך לשמירה.`;
+  const box = document.getElementById("local-email");
+  box.textContent = msg;
+  box.style.display = "block";
 }\nסיסמה: ${password}`;
       const box = document.getElementById("local-email");
       box.textContent = msg;
@@ -135,6 +142,12 @@
   const subject = encodeURIComponent("תודה על ההרשמה למערכת QR");
   const body = encodeURIComponent(`תודה על ההרשמה!
 הנה האימייל שלך: ${email}
+סיסמה: ${password}
+
+אנא צלם מסך לשמירה.`);
+  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+  window.open(mailtoLink, "_blank");
+}
 סיסמה: ${password}
 
 אנא צלם מסך לשמירה.`);
