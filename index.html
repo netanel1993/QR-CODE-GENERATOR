@@ -52,6 +52,7 @@
       border: 1px solid #9ccc9c;
       border-radius: 5px;
       display: none;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -117,43 +118,15 @@
     }
 
     function showLocalEmail(email, password) {
-  const msg = `תודה על ההרשמה!
-הנה האימייל שלך: ${email}
-סיסמה: ${password}
-
-אנא צלם מסך לשמירה.`;
-  const box = document.getElementById("local-email");
-  box.textContent = msg;
-  box.style.display = "block";
-}
-סיסמה: ${password}
-
-אנא צלם מסך לשמירה.`;
-  const box = document.getElementById("local-email");
-  box.textContent = msg;
-  box.style.display = "block";
-}\nסיסמה: ${password}`;
+      const msg = `תודה על ההרשמה!\nהנה האימייל שלך: ${email}\nסיסמה: ${password}\n\nאנא צלם מסך לשמירה.`;
       const box = document.getElementById("local-email");
       box.textContent = msg;
       box.style.display = "block";
     }
 
     function sendEmailLocally(email, password) {
-  const subject = encodeURIComponent("תודה על ההרשמה למערכת QR");
-  const body = encodeURIComponent(`תודה על ההרשמה!
-הנה האימייל שלך: ${email}
-סיסמה: ${password}
-
-אנא צלם מסך לשמירה.`);
-  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-  window.open(mailtoLink, "_blank");
-}
-סיסמה: ${password}
-
-אנא צלם מסך לשמירה.`);
-  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-  window.open(mailtoLink, "_blank");
-}\nסיסמה: ${password}\n\nבהצלחה!`);
+      const subject = encodeURIComponent("תודה על ההרשמה למערכת QR");
+      const body = encodeURIComponent(`תודה על ההרשמה!\nהנה האימייל שלך: ${email}\nסיסמה: ${password}\n\nאנא צלם מסך לשמירה.`);
       const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
       window.open(mailtoLink, "_blank");
     }
