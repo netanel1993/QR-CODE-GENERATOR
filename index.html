@@ -8,48 +8,56 @@
     body {
       direction: rtl;
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
+      background: #f0f0f0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
     }
-    input {
+    input, button {
       padding: 10px;
       font-size: 18px;
-      width: 300px;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
+      margin: 10px;
     }
     #qrcode {
-      margin-top: 30px;
+      margin: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>יצירת QR קוד</h1>
+  <h1>יצירת QR קוד + הורדה</h1>
   <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
   <button onclick="generateQR()">צור קוד QR</button>
+  <button onclick="downloadQR()">הורד קוד QR</button>
 
   <div id="qrcode"></div>
 
   <script>
+    let qrCode; // משתנה גלובלי כדי שנוכל לגשת אליו מהפונקציה השנייה
+
     function generateQR() {
       const container = document.getElementById('qrcode');
       container.innerHTML = ""; // מנקה קוד קודם
       const text = document.getElementById('text').value;
       if (text.trim() === "") return;
-      new QRCode(container, {
+
+      qrCode = new QRCode(container, {
         text: text,
         width: 256,
         height: 256
       });
+    }
+
+    function downloadQR() {
+      const qrCanvas = document.querySelector('#qrcode canvas');
+      if (!qrCanvas) return alert("אנא צור קוד QR קודם");
+      const image = qrCanvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = 'qrcode.png';
+      link.click();
     }
   </script>
 
