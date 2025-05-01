@@ -26,22 +26,37 @@
   <div id="qrcode"></div>
 
   <script>
-    const text = localStorage.getItem('qr_text');
-    const qrColor = localStorage.getItem('qr_color') || "#000000";
-    const bgColor = localStorage.getItem('qr_bg') || "#ffffff";
+    window.qrText = localStorage.getItem('qr_text');
+    window.qrColor = localStorage.getItem('qr_color') || "#000000";
+    window.bgColor = localStorage.getItem('qr_bg') || "#ffffff";
 
     if (text) {
       new QRCode(document.getElementById("qrcode"), {
-        text: text,
-        width: 256,
-        height: 256,
-        colorDark: qrColor,
-        colorLight: bgColor
-      });
+      text: qrText,
+      width: 256,
+      height: 256,
+      colorDark: qrColor,
+      colorLight: bgColor
+    });
     } else {
       document.body.innerHTML = "<h3>לא נמצא QR שנשמר</h3>";
     }
   </script>
 
+  <button onclick="showStats()" style="margin-top: 20px;">📊 הצג סטטיסטיקה</button>
+  <div id="stats" style="display:none; margin-top:20px; background:#fff; padding:15px; border:1px solid #ccc; border-radius:8px;">
+    <h3>סטטיסטיקה כללית:</h3>
+    <p>QR אחרון: <span id="statText"></span></p>
+    <p>צבע קוד: <span id="statColor"></span></p>
+    <p>רקע: <span id="statBg"></span></p>
+  </div>
+  <script>
+    function showStats() {
+      document.getElementById('stats').style.display = 'block';
+      document.getElementById('statText').innerText = qrText || 'אין';
+      document.getElementById('statColor').innerText = qrColor;
+      document.getElementById('statBg').innerText = bgColor;
+    }
+  </script>
 </body>
 </html>
