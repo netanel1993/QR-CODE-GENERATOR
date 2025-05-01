@@ -214,7 +214,6 @@
 
         const finalImage = canvas.toDataURL("image/png");
 
-        // עדכון תצוגת QR
         const container = document.getElementById('qrcode');
         container.innerHTML = '';
         const imageElement = document.createElement('img');
@@ -226,6 +225,7 @@
     };
     reader.readAsDataURL(file);
   }
+}
 }
         reader.readAsDataURL(file);
       }
