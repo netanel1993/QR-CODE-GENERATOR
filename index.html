@@ -212,17 +212,21 @@
         const y = (canvas.height - logoSize) / 2;
         ctx.drawImage(img, x, y, logoSize, logoSize);
 
-        // הצג את ה-QR עם הלוגו
-        const newImg = document.createElement('img');
-        newImg.src = canvas.toDataURL("image/png");
-        qrCanvas.parentElement.innerHTML = '';
-        qrCanvas.parentElement.appendChild(newImg);
+        const finalImage = canvas.toDataURL("image/png");
+
+        // עדכון תצוגת QR
+        const container = document.getElementById('qrcode');
+        container.innerHTML = '';
+        const imageElement = document.createElement('img');
+        imageElement.src = finalImage;
+        imageElement.alt = 'QR עם לוגו';
+        container.appendChild(imageElement);
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   }
-};
+}
         reader.readAsDataURL(file);
       }
     }
