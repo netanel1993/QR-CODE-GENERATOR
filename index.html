@@ -184,10 +184,12 @@
 
         const container = document.getElementById('qrcode');
         container.innerHTML = '';
-        const imageElement = document.createElement('img');
-        imageElement.src = finalImage;
-        imageElement.alt = 'QR עם לוגו';
-        container.appendChild(imageElement);
+        const canvasFinal = document.createElement('canvas');
+        canvasFinal.width = canvas.width;
+        canvasFinal.height = canvas.height;
+        const finalCtx = canvasFinal.getContext('2d');
+        finalCtx.drawImage(canvas, 0, 0);
+        container.appendChild(canvasFinal);
       };
       img.src = e.target.result;
     };
