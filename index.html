@@ -155,6 +155,10 @@
       const color = document.getElementById('qrColor').value;
       const bgColor = document.getElementById('bgColor').value;
 
+      localStorage.setItem('qr_text', text);
+      localStorage.setItem('qr_color', color);
+      localStorage.setItem('qr_bg', bgColor);
+      window.open('custom-page.html', '_blank');
       qrCode = new QRCode(container, {
         text: text,
         width: 256,
@@ -252,5 +256,6 @@ function downloadQR() {
 }
   </script>
 
+  
 </body>
 </html>
