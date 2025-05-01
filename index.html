@@ -2,8 +2,9 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>מחולל QR קוד</title>
+  <title>מחולל QR קוד עם לוגו</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
       direction: rtl;
@@ -15,31 +16,72 @@
       justify-content: center;
       height: 100vh;
     }
-    input, button {
+    input, button, a {
       padding: 10px;
       font-size: 18px;
       margin: 10px;
+      text-align: center;
+      text-decoration: none;
     }
     #qrcode {
       margin: 20px;
+      position: relative;
+    }
+    #logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      display: none;
+      pointer-events: none;
+    }
+    #g_id_onload, .g_id_signin {
+      margin: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>יצירת QR קוד + הורדה</h1>
-  <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
-  <button onclick="generateQR()">צור קוד QR</button>
-  <button onclick="downloadQR()">הורד קוד QR</button>
+  <h1>יצירת QR קוד</h1>
 
-  <div id="qrcode"></div>
+  <!-- אזור התחברות -->
+  <div id="login-section">
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+  </div>
+
+  <div id="app" style="display:none;">
+    <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
+    <button onclick="generateQR()">צור קוד QR</button>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA" target="_blank" onclick="addLogo()">הוסף לוגו (9.90 ש"ח דרך PayPal)</a>
+    <button onclick="downloadQR()">הורד קוד QR</button>
+
+    <div id="qrcode">
+      <img id="logo" src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo">
+    </div>
+  </div>
 
   <script>
-    let qrCode; // משתנה גלובלי כדי שנוכל לגשת אליו מהפונקציה השנייה
+    let qrCode;
+
+    function handleCredentialResponse(response) {
+      // תוכל לשמור את הטוקן או להציג שם משתמש בעתיד
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      console.log("Logged in with Google ID Token:", response.credential);
+    }
 
     function generateQR() {
       const container = document.getElementById('qrcode');
-      container.innerHTML = ""; // מנקה קוד קודם
+      container.innerHTML = "";
       const text = document.getElementById('text').value;
       if (text.trim() === "") return;
 
@@ -48,6 +90,13 @@
         width: 256,
         height: 256
       });
+    }
+
+    function addLogo() {
+      setTimeout(() => {
+        const logo = document.getElementById("logo");
+        logo.style.display = "block";
+      }, 2000);
     }
 
     function downloadQR() {
