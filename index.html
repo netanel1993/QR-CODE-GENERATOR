@@ -45,6 +45,14 @@
       flex-direction: column;
       align-items: center;
     }
+    #local-email {
+      background-color: #e0ffe0;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #9ccc9c;
+      border-radius: 5px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -69,6 +77,8 @@
     </div>
   </div>
 
+  <div id="local-email"></div>
+
   <div id="app" style="display:none;">
     <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
     <a href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA" target="_blank" onclick="addLogo()">הוסף לוגו (9.90 ש"ח דרך PayPal)</a>
@@ -92,8 +102,10 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       if (email && password) {
-        localStorage.setItem("user", JSON.stringify({ email: email }));
+        localStorage.setItem("user", JSON.stringify({ email: email, password: password }));
         showApp();
+        showLocalEmail(email, password);
+        sendEmailLocally(email, password);
       } else {
         alert("אנא הזן אימייל וסיסמה");
       }
@@ -102,6 +114,20 @@
     function showApp() {
       document.getElementById("login-section").style.display = "none";
       document.getElementById("app").style.display = "block";
+    }
+
+    function showLocalEmail(email, password) {
+      const msg = `תודה על ההרשמה!\nאימייל: ${email}\nסיסמה: ${password}`;
+      const box = document.getElementById("local-email");
+      box.textContent = msg;
+      box.style.display = "block";
+    }
+
+    function sendEmailLocally(email, password) {
+      const subject = encodeURIComponent("תודה על ההרשמה למערכת QR");
+      const body = encodeURIComponent(`שלום,\n\nתודה שנרשמת!\nהנה פרטי ההתחברות שלך:\nאימייל: ${email}\nסיסמה: ${password}\n\nבהצלחה!`);
+      const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+      window.open(mailtoLink, "_blank");
     }
 
     function generateQR() {
