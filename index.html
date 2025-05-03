@@ -7,7 +7,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-KKZDZ9CJ1E');
   </script>
   <link rel="icon" href="favicon_qr_styled.ico" type="image/x-icon">
@@ -15,63 +14,74 @@
   <meta charset="UTF-8">
   <meta name="keywords" content="מחולל QR, יצירת QR אונליין, QR עם לוגו, קוד QR לעסק, קוד QR מותאם אישית, קוד QR חינמי, קוד QR לאירועים, קוד QR למוצרים, QR מעוצב, ייצור QR בקלות, סריקת QR, QR דינמי, QR ליצירת קשר, QR לפרסום, מחולל QR מהיר, QR למיתוג, QR עם תמונה, QR לעסקים קטנים, QR לקידום מכירות, QR בהתאמה אישית">
   <title>מחולל QR עם לוגו</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     body {
       direction: rtl;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom right, #fdfcfb, #e2d1c3);
+      font-family: 'Varela Round', sans-serif;
+      background: linear-gradient(135deg, #fff7e6, #ffe4e1);
       text-align: center;
       padding: 30px;
-      color: #333;
+      color: #2e3d49;
       animation: fadeIn 1.5s ease-in-out;
     }
+    body.dark-mode {
+      background: #121212;
+      color: #fff;
+    }
+    body.dark-mode #text-section p,
+    body.dark-mode #text-section li,
+    body.dark-mode #pay-link + p {
+      color: #fff !important;
+    }
     h1 {
-      color: #00796b;
-      font-size: 2.2em;
+      color: #4a148c;
+      font-size: 2.6em;
       margin-bottom: 20px;
+      text-shadow: 1px 1px 3px #aaa;
     }
     .form-group, #upload-logo {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
+      background: #ffffffee;
+      border-radius: 14px;
+      padding: 20px;
       margin: 10px auto;
-      width: 80%;
-      max-width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 440px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.12);
+    }
+    body.dark-mode .form-group, body.dark-mode #upload-logo {
+      background: #1e1e1e;
     }
     input[type="text"] {
-      width: 90%;
-      padding: 10px;
-      font-size: 1em;
+      width: 92%;
+      padding: 12px;
+      font-size: 1.05em;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
     }
     input[type="color"] {
-      margin: 0 5px;
+      margin: 0 8px;
     }
     button, a#pay-link {
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      background-color: #00796b;
+      background-color: #6a1b9a;
       color: white;
       border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 6px;
+      padding: 12px 25px;
+      margin: 10px 5px;
+      border-radius: 8px;
       font-size: 1em;
       cursor: pointer;
-      transition: background-color 0.3s;
       text-decoration: none;
       display: inline-block;
+      transition: background-color 0.3s, transform 0.2s;
     }
     button:hover, a#pay-link:hover {
+      background-color: #4a148c;
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-      background-color: #004d40;
     }
     #qrcode {
-      margin: 20px auto;
+      margin: 25px auto;
     }
     #upload-logo {
       display: none;
@@ -81,19 +91,29 @@
       to { opacity: 1; transform: translateY(0); }
     }
     #qrcode canvas {
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
       transition: transform 0.3s ease;
     }
     #qrcode canvas:hover {
-      transform: scale(1.05);
+      transform: scale(1.07);
+    }
+    .dark-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <p style="font-size: 1.2em; color: #555; max-width: 500px; margin: 0 auto 20px auto;">
-    🌟 צור קוד QR מעוצב בהתאמה אישית – עכשיו עם אפשרות לשילוב לוגו עסקי לקידום מיתוג חכם. מתאים לעסקים, יוצרי תוכן, אירועים ועוד!
-  </p>
+  <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌓 מצב כהה</button>
   <h1>מחולל QR עם לוגו</h1>
 
   <div class="form-group">
@@ -109,88 +129,36 @@
   <div id="qrcode"></div>
 
   <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">💰 הוסף לוגו (₪9.90)</a>
+  <p style="font-size: 1em; color: #333; max-width: 550px; margin: 0 auto 10px auto;">
+    הוספת לוגו תשדרג את המיתוג שלך – תגרום לקוד להיראות יוקרתי, מושך ומקצועי.<br>
+    השקעה חד־פעמית קטנה שתשאיר רושם גדול בכל סריקה!
+  </p>
+
   <br><br>
   <button onclick="downloadQR()">⬇️ הורד QR</button>
   <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
 
-  <div id="upload-logo">
-    <input type="file" id="logoInput" accept="image/*">
-    <p>📎 העלאת לוגו תשלב אותו בתוך ה־QR</p>
-  </div>
-
-  <section style="max-width: 700px; margin: 40px auto; text-align: right; font-size: 1.1em; line-height: 1.7; color: #444;">
-    <h2 style="color: #00695c;">מהו מחולל QR ולמה להשתמש בו?</h2>
-    <p>
-      מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים
-      תוך שניות – ללא צורך בהרשמה. השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.
-      אם ברצונכם לחולל בתוך ה QR תמונה יש צורך בתשלום חד פעמי של 9.90 ש''ח 
+  <div id="text-section">
+    <p style="font-size: 1.1em; max-width: 700px; margin: 40px auto 20px auto; text-align: right;">
+      <strong>מהו מחולל QR ולמה להשתמש בו?</strong><br>
+      מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים תוך שניות – ללא צורך בהרשמה.
+      השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.
     </p>
-    <p>
-      מחולל ה־QR שלנו מתאים במיוחד לבעלי עסקים, יוצרי תוכן, מארגני אירועים וכל מי שמעוניין ביצירת קוד QR עם מיתוג אישי הכולל גם לוגו.
-      הקוד עובד בכל סורק QR סטנדרטי ונראה מצוין גם על כרטיסי ביקור, פליירים, אריזות מוצרים, מדבקות, ועוד.
+    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 20px auto; text-align: right;">
+      מחולל ה־QR שלנו מתאים במיוחד לבעלי עסקים, יוצרי תוכן, מארגני אירועים וכל מי שמעוניין ביצירת קוד QR עם מיתוג אישי הכולל גם לוגו. הקוד עובד בכל סורק QR סטנדרטי ונראה מצוין גם על כרטיסי ביקור, פליירים, אריזות מוצרים, מדבקות, ועוד.
     </p>
-    <p>
-      בשונה מכלים פשוטים אחרים, מחולל QR זה כולל אפשרויות עיצוב מתקדמות כמו בחירת צבעים, הוספת לוגו עסקי,
-      ושמירת הקוד באיכות גבוהה (PNG) להורדה או שיתוף מיידי ב־WhatsApp וב־Facebook.
+    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 20px auto; text-align: right;">
+      בשונה מכלים פשוטים אחרים, מחולל QR זה כולל אפשרויות עיצוב מתקדמות כמו בחירת צבעים, הוספת לוגו עסקי, ושמירת הקוד באיכות גבוהה (PNG) להורדה או שיתוף מיידי ב־WhatsApp וב־Facebook.
     </p>
-    <h3 style="color: #00897b;">למי זה מתאים?</h3>
-    <ul style="margin-right: 20px;">
+    <ul style="text-align: right; max-width: 700px; margin: 0 auto 20px auto;">
       <li>לבעלי עסקים קטנים המעוניינים להוסיף קוד QR עם לוגו על מוצרים</li>
       <li>ליזמים בתחום האיקומרס המחפשים כלי להפניית לקוחות לדף מוצר</li>
       <li>לאנשים פרטיים המעוניינים לייצר קוד QR לאירוע, חתונה או מסיבה</li>
       <li>למשווקים דיגיטליים המעוניינים ב־QR לפרסום ברשתות החברתיות</li>
     </ul>
-    <p>
-      אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית.
-      <strong>מחולל QR</strong> איכותי בעברית – פשוט, חינמי ומהיר.
+    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 30px auto; text-align: right;">
+      אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית. מחולל QR איכותי בעברית – פשוט, חינמי ומהיר.
     </p>
-  </section>
-
-  <script>
-    function generateQR() {
-      const container = document.getElementById('qrcode');
-      container.innerHTML = "";
-      const text = document.getElementById('text').value;
-      const color = document.getElementById('qrColor').value;
-      const bgColor = document.getElementById('bgColor').value;
-      if (text.trim() === "") return;
-
-      new QRCode(container, {
-        text: text,
-        width: 256,
-        height: 256,
-        colorDark: color,
-        colorLight: bgColor,
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    }
-
-    function downloadQR() {
-      const canvas = document.querySelector('#qrcode canvas');
-      if (!canvas) return alert("קוד QR לא קיים עדיין");
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL("image/png");
-      link.download = 'qrcode.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function shareOnWhatsApp() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) return alert("לא ניתן לשתף קוד ריק");
-      const url = encodeURIComponent(text);
-      const whatsappLink = `https://wa.me/?text=${url}`;
-      window.open(whatsappLink, '_blank');
-    }
-
-    function shareOnFacebook() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) return alert("לא ניתן לשתף קוד ריק");
-      const url = encodeURIComponent(text);
-      const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-      window.open(fbLink, '_blank');
-    }
-  </script>
+  </div>
 </body>
 </html>
