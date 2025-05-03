@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://netanel1993.github.io/QR-CODE-GENERATOR/sitemap.xml
