@@ -81,7 +81,8 @@
 
   <button onclick="generateQR()">צור קוד QR</button>
   <div id="qrcode"></div>
-  <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">הוסף לוגו (9.90 ש"ח)</a>
+  <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">הוסף לוגו (₪9.90)</a>
+  <br><br>
   <br><br>
   <button onclick="downloadQR()">הורד QR</button>
 
@@ -126,8 +127,10 @@
 
     // אם בוצע תשלום בעבר, נאפשר העלאת לוגו אוטומטית
     if (localStorage.getItem("paid") === "true") {
-      enableLogoUpload();
-    }
+  enableLogoUpload();
+  const payLink = document.getElementById("pay-link");
+  if (payLink) payLink.style.display = "none";
+}
   </script>
 </body>
 </html>
