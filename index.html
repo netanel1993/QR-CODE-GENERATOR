@@ -33,8 +33,19 @@
     h1 {
       color: #4a148c;
       font-size: 2.6em;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       text-shadow: 1px 1px 3px #aaa;
+    }
+    .welcome-heading {
+      font-size: 2em;
+      color: #5e35b1;
+      margin-bottom: 5px;
+      animation: fadeIn 1.2s ease-in-out;
+      text-shadow: 1px 1px 3px #bbb;
+    }
+    body.dark-mode .welcome-heading {
+      color: #bb86fc;
+      text-shadow: 1px 1px 3px #222;
     }
     .form-group, #upload-logo {
       background: #ffffffee;
@@ -124,7 +135,12 @@
 </head>
 <body>
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌓 מצב כהה</button>
-  <h1>מחולל QR עם לוגו</h1>
+
+    <h1>מחולל QR עם לוגו</h1>
+  <p style="font-size: 1.2em; color: #555; margin-top: -10px; margin-bottom: 30px; animation: fadeIn 1.5s ease-in-out;">
+    בין אם יש לך עסק, אירוע או רעיון – זה הזמן להפוך כל לינק פשוט לקוד QR מעוצב ובלתי נשכח.<br>
+    הוסף צבע, רקע ולוגו אישי – והפוך כל סריקה לחוויה מקצועית שמושכת תשומת לב.
+  </p>
 
   <div class="form-group">
     <input type="text" id="text" placeholder="הכנס טקסט או קישור ל־QR">
