@@ -99,6 +99,7 @@
   <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">💰 הוסף לוגו (₪9.90)</a>
   <br><br>
   <button onclick="downloadQR()">⬇️ הורד QR</button>
+  <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
 
   <div id="upload-logo">
     <input type="file" id="logoInput" accept="image/*">
@@ -121,9 +122,8 @@
       localStorage.setItem('qr_bg', bgColor);
 
       qrCode = new QRCode(container, {
-        text: text,
-        width: 256,
-        height: 256,
+        width: 512,
+        height: 512,
         colorDark: color,
         colorLight: bgColor,
         correctLevel: QRCode.CorrectLevel.H
@@ -132,20 +132,20 @@
 
     function downloadQR() {
       const container = document.getElementById('qrcode');
-      const qrImg = container.querySelector('img');
+      const qrImg = container.querySelector('img') || container.querySelector('canvas');
       const logoInput = document.getElementById('logoInput');
 
       if (!qrImg) return alert("אנא צור קוד QR קודם");
 
       const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
+      canvas.width = 512;
+      canvas.height = 512;
       const ctx = canvas.getContext('2d');
 
       const baseImage = new Image();
       baseImage.crossOrigin = "anonymous";
       baseImage.onload = function () {
-        ctx.drawImage(baseImage, 0, 0, 256, 256);
+        ctx.drawImage(baseImage, 0, 0, 512, 512);
 
         if (logoInput.files && logoInput.files[0]) {
           const reader = new FileReader();
@@ -165,7 +165,7 @@
           saveFinal(canvas);
         }
       };
-      baseImage.src = qrImg.src;
+      baseImage.src = qrImg.tagName === 'CANVAS' ? qrImg.toDataURL("image/png") : qrImg.src;
     }
 
     function saveFinal(canvas) {
@@ -173,7 +173,9 @@
       const link = document.createElement('a');
       link.href = image;
       link.download = 'qrcode.png';
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     }
 
     function enableLogoUpload() {
@@ -184,6 +186,14 @@
         return;
       }
       document.getElementById("upload-logo").style.display = "block";
+    }
+
+    function shareOnWhatsApp() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return alert("לא ניתן לשתף קוד ריק");
+      const url = encodeURIComponent(text);
+      const whatsappLink = `https://wa.me/?text=${url}`;
+      window.open(whatsappLink, '_blank');
     }
 
     if (localStorage.getItem("paid") === "true") {
