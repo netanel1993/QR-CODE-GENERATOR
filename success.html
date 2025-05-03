@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>תשלום הצליח</title>
+  <style>
+    body {
+      direction: rtl;
+      font-family: Arial, sans-serif;
+      background: #e8fff1;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #2d7a4a;
+    }
+    a {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 12px 24px;
+      background: #2d7a4a;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ תודה! התשלום התקבל בהצלחה</h1>
+  <p>כעת תוכל להוסיף את הלוגו שלך לקוד ה־QR.</p>
+  <a href="index.html">לחץ כאן לחזרה למחולל</a>
+
+  <script>
+    // סימון שהתשלום בוצע
+    localStorage.setItem("paid", true);
+  </script>
+</body>
+</html>
