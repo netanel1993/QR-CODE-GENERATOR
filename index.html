@@ -109,6 +109,24 @@
   </div>
 
   <script>
+    function generateQR() {
+      const container = document.getElementById('qrcode');
+      container.innerHTML = "";
+      const text = document.getElementById('text').value;
+      const color = document.getElementById('qrColor').value;
+      const bgColor = document.getElementById('bgColor').value;
+      if (text.trim() === "") return;
+
+      new QRCode(container, {
+        text: text,
+        width: 256,
+        height: 256,
+        colorDark: color,
+        colorLight: bgColor,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
     function shareOnWhatsApp() {
       const text = document.getElementById('text').value.trim();
       if (!text) return alert("לא ניתן לשתף קוד ריק");
@@ -116,13 +134,14 @@
       const whatsappLink = `https://wa.me/?text=${url}`;
       window.open(whatsappLink, '_blank');
     }
-function shareOnFacebook() {
+
+    function shareOnFacebook() {
       const text = document.getElementById('text').value.trim();
       if (!text) return alert("לא ניתן לשתף קוד ריק");
       const url = encodeURIComponent(text);
       const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
       window.open(fbLink, '_blank');
     }
-</script>
+  </script>
 </body>
 </html>
