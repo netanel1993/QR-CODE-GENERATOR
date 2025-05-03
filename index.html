@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
+  <meta name="google-site-verification" content="googled31f68093c7a279c" />
   <meta charset="UTF-8">
-  google-site-verification: googled31f68093c7a279c.html
   <title>מחולל QR עם לוגו</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -108,87 +108,6 @@
   </div>
 
   <script>
-    let qrCode;
-
-    function generateQR() {
-      const container = document.getElementById('qrcode');
-      container.innerHTML = "";
-      const text = document.getElementById('text').value;
-      const color = document.getElementById('qrColor').value;
-      const bgColor = document.getElementById('bgColor').value;
-      if (text.trim() === "") return;
-
-      localStorage.setItem('qr_text', text);
-      localStorage.setItem('qr_color', color);
-      localStorage.setItem('qr_bg', bgColor);
-
-      qrCode = new QRCode(container, {
-        width: 512,
-        height: 512,
-        colorDark: color,
-        colorLight: bgColor,
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    }
-
-    function downloadQR() {
-      const container = document.getElementById('qrcode');
-      const qrImg = container.querySelector('img') || container.querySelector('canvas');
-      const logoInput = document.getElementById('logoInput');
-
-      if (!qrImg) return alert("אנא צור קוד QR קודם");
-
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      const baseImage = new Image();
-      baseImage.crossOrigin = "anonymous";
-      baseImage.onload = function () {
-        ctx.drawImage(baseImage, 0, 0, 512, 512);
-
-        if (logoInput.files && logoInput.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const logo = new Image();
-            logo.onload = function () {
-              const logoSize = 60;
-              const x = (canvas.width - logoSize) / 2;
-              const y = (canvas.height - logoSize) / 2;
-              ctx.drawImage(logo, x, y, logoSize, logoSize);
-              saveFinal(canvas);
-            };
-            logo.src = e.target.result;
-          };
-          reader.readAsDataURL(logoInput.files[0]);
-        } else {
-          saveFinal(canvas);
-        }
-      };
-      baseImage.src = qrImg.tagName === 'CANVAS' ? qrImg.toDataURL("image/png") : qrImg.src;
-    }
-
-    function saveFinal(canvas) {
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = 'qrcode.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function enableLogoUpload() {
-      const user = localStorage.getItem("user");
-      const paid = localStorage.getItem("paid") === "true";
-      if (!user && !paid) {
-        alert("יש להתחבר או לשלם לפני העלאת לוגו");
-        return;
-      }
-      document.getElementById("upload-logo").style.display = "block";
-    }
-
     function shareOnWhatsApp() {
       const text = document.getElementById('text').value.trim();
       if (!text) return alert("לא ניתן לשתף קוד ריק");
@@ -196,12 +115,13 @@
       const whatsappLink = `https://wa.me/?text=${url}`;
       window.open(whatsappLink, '_blank');
     }
-
-    if (localStorage.getItem("paid") === "true") {
-      enableLogoUpload();
-      const payLink = document.getElementById("pay-link");
-      if (payLink) payLink.style.display = "none";
+function shareOnFacebook() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return alert("לא ניתן לשתף קוד ריק");
+      const url = encodeURIComponent(text);
+      const fbLink = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+      window.open(fbLink, '_blank');
     }
-  </script>
+</script>
 </body>
 </html>
