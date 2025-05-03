@@ -2,162 +2,109 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>מחולל QR קוד עם לוגו</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">function resetAll() {
-  document.getElementById('text').value = '';
-  document.getElementById('qrcode').innerHTML = '';
-  document.getElementById('upload-logo').style.display = 'none';
-  document.getElementById('logo').src = '';
-}
+  <title>מחולל QR עם לוגו</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">function downloadQR() {
+  const qrCanvas = document.querySelector('#qrcode canvas');
+  const logoInput = document.getElementById('logoInput');
 
+  if (!qrCanvas) return alert("אנא צור קוד QR קודם");
+
+  const canvas = document.createElement('canvas');
+  canvas.width = qrCanvas.width;
+  canvas.height = qrCanvas.height;
+  const ctx = canvas.getContext('2d');
+
+  // צייר את ה-QR
+  ctx.drawImage(qrCanvas, 0, 0);
+
+  // אם הועלה לוגו, שלב אותו במרכז
+  if (logoInput.files && logoInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const logoSize = 60;
+        const x = (canvas.width - logoSize) / 2;
+        const y = (canvas.height - logoSize) / 2;
+        ctx.drawImage(img, x, y, logoSize, logoSize);
+
+        const finalImage = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = finalImage;
+        link.download = 'qrcode_with_logo.png';
+        link.click();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(logoInput.files[0]);
+  } else {
+    // הורדה רגילה ללא לוגו
+    const image = qrCanvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'qrcode.png';
+    link.click();
+  }
+}
 </script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
       direction: rtl;
       font-family: Arial, sans-serif;
       background: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    input, button, a {
-      padding: 10px;
-      font-size: 18px;
-      margin: 10px;
       text-align: center;
-      text-decoration: none;
+      padding: 30px;
     }
     #qrcode {
       margin: 20px;
-      position: relative;
-    }
-    #logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
-      display: none;
-      pointer-events: none;
     }
     #upload-logo {
       display: none;
+      margin-top: 20px;
     }
-    #g_id_onload, .g_id_signin {
-      margin: 10px;
-    }
-    #manual-login {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #local-email {
-      background-color: #e0ffe0;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #9ccc9c;
-      border-radius: 5px;
-      display: none;
-      white-space: pre-line;
+    .form-group {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
+  <h1>מחולל QR עם לוגו</h1>
 
-  <h1>יצירת QR קוד</h1>
-
-  <!-- אזור התחברות -->
-  <div id="login-section">
-    <div id="g_id_onload"
-         data-client_id="YOUR_GOOGLE_CLIENT_ID"
-         data-context="signin"
-         data-ux_mode="popup"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin" data-type="standard"></div>
-
-    <div id="manual-login">
-      <input type="email" id="email" placeholder="אימייל" required>
-      <input type="password" id="password" placeholder="סיסמה" required>
-      <button onclick="manualLogin()">התחבר / הירשם</button>
-    </div>
+  <div class="form-group">
+    <input type="text" id="text" placeholder="הכנס טקסט או קישור ל־QR" size="40">
   </div>
 
-  <div id="local-email"></div>
+  <div class="form-group">
+    <label>צבע QR: <input type="color" id="qrColor" value="#000000"></label>
+    <label>צבע רקע: <input type="color" id="bgColor" value="#ffffff"></label>
+  </div>
 
-  <div id="app" style="display:none;">
-<label>בחר צבע קוד QR: <input type="color" id="qrColor" value="#000000"></label>
-    <label>בחר צבע רקע: <input type="color" id="bgColor" value="#ffffff"></label>
-    <button onclick="resetAll()">איפוס הכל</button>
-    <input type="text" id="text" placeholder="הכנס קישור או טקסט כאן" />
-    <a href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA" target="_blank" onclick="setTimeout(enableLogoUpload, 2000)">הוסף לוגו (9.90 ש"ח)</a>
-    <button onclick="generateQR()">צור קוד QR</button>
-    <button onclick="downloadQR()">הורד QR</button>
-    
-    <input type="file" id="upload-logo" accept="image/*" onchange="handleLogoUpload(event)">
+  <button onclick="generateQR()">צור קוד QR</button>
+  <div id="qrcode"></div>
+  <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">הוסף לוגו (9.90 ש"ח)</a>
+  <br><br>
+  <button onclick="downloadQR()">הורד QR</button>
 
-    <div id="qrcode">
-      <img id="logo" src="" alt="Logo">
-    </div>
+  <div id="upload-logo">
+<input type="file" id="logoInput" accept="image/*">
+    <p>העלאת לוגו תשלב אותו בתוך ה־QR</p>
   </div>
 
   <script>
     let qrCode;
 
-    function handleCredentialResponse(response) {
-      localStorage.setItem("user", JSON.stringify({ google: true, token: response.credential }));
-      showApp();
-    }
-
-    function manualLogin() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      if (email && password) {
-        localStorage.setItem("user", JSON.stringify({ email: email, password: password }));
-        showApp();
-        showLocalEmail(email, password);
-        sendEmailLocally(email, password);
-      } else {
-        alert("אנא הזן אימייל וסיסמה");
-      }
-    }
-
-    function showApp() {
-      document.getElementById("login-section").style.display = "none";
-      document.getElementById("app").style.display = "block";
-    }
-
-    function showLocalEmail(email, password) {
-      const msg = `תודה על ההרשמה!\nהנה האימייל שלך: ${email}\nסיסמה: ${password}\n\nאנא צלם מסך לשמירה.`;
-      const box = document.getElementById("local-email");
-      box.textContent = msg;
-      box.style.display = "block";
-    }
-
-    function sendEmailLocally(email, password) {
-      const subject = encodeURIComponent("תודה על ההרשמה למערכת QR");
-      const body = encodeURIComponent(`תודה על ההרשמה!\nהנה האימייל שלך: ${email}\nסיסמה: ${password}\n\nאנא צלם מסך לשמירה.`);
-      const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-      window.open(mailtoLink, "_blank");
-    }
-
     function generateQR() {
       const container = document.getElementById('qrcode');
       container.innerHTML = "";
       const text = document.getElementById('text').value;
-      if (text.trim() === "") return;
-
       const color = document.getElementById('qrColor').value;
       const bgColor = document.getElementById('bgColor').value;
+      if (text.trim() === "") return;
 
       localStorage.setItem('qr_text', text);
       localStorage.setItem('qr_color', color);
       localStorage.setItem('qr_bg', bgColor);
+
       qrCode = new QRCode(container, {
         text: text,
         width: 256,
@@ -169,92 +116,18 @@
 
     function enableLogoUpload() {
       const user = localStorage.getItem("user");
-      if (!user) {
-        alert("יש להתחבר לפני רכישת לוגו");
+      const paid = localStorage.getItem("paid") === "true";
+      if (!user && !paid) {
+        alert("יש להתחבר או לשלם לפני העלאת לוגו");
         return;
       }
       document.getElementById("upload-logo").style.display = "block";
     }
 
-    function handleLogoUpload(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const qrCanvas = document.querySelector('#qrcode canvas');
-      if (!qrCanvas) return alert("אנא צור קוד QR קודם");
-
-      const canvas = document.createElement('canvas');
-      canvas.width = qrCanvas.width;
-      canvas.height = qrCanvas.height;
-      const ctx = canvas.getContext('2d');
-
-      ctx.drawImage(qrCanvas, 0, 0);
-
-      const img = new Image();
-      img.onload = function() {
-        const logoSize = 100;
-        const x = (canvas.width - logoSize) / 2;
-        const y = (canvas.height - logoSize) / 2;
-        ctx.drawImage(img, x, y, logoSize, logoSize);
-
-        const finalImage = canvas.toDataURL("image/png");
-
-        const container = document.getElementById('qrcode');
-        container.innerHTML = '';
-        const canvasFinal = document.createElement('canvas');
-        canvasFinal.width = canvas.width;
-        canvasFinal.height = canvas.height;
-        const finalCtx = canvasFinal.getContext('2d');
-        finalCtx.drawImage(canvas, 0, 0);
-        container.appendChild(canvasFinal);
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function downloadQR() {
-  const qrCanvas = document.querySelector('#qrcode canvas');
-  const logoImg = document.getElementById("logo");
-  if (!qrCanvas) return alert("אנא צור קוד QR קודם");
-
-  const canvas = document.createElement('canvas');
-  canvas.width = qrCanvas.width;
-  canvas.height = qrCanvas.height;
-  const ctx = canvas.getContext('2d');
-
-  // צייר את ה-QR
-  ctx.drawImage(qrCanvas, 0, 0);
-
-  // הוסף לוגו אם מופיע
-  if (logoImg.src && logoImg.style.display !== "none") {
-    const logoSize = 50;
-    const x = (canvas.width - logoSize) / 2;
-    const y = (canvas.height - logoSize) / 2;
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = function() {
-      ctx.drawImage(img, x, y, logoSize, logoSize);
-      const imageWithLogo = canvas.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.href = imageWithLogo;
-      link.download = 'qrcode_with_logo.png';
-      link.click();
-    };
-    img.src = logoImg.src;
-  } else {
-    // הורדה רגילה ללא לוגו
-    const image = qrCanvas.toDataURL("image/png");
-    const link = document.createElement('a');
-    link.href = image;
-    link.download = 'qrcode.png';
-    link.click();
-  }
-}
+    // אם בוצע תשלום בעבר, נאפשר העלאת לוגו אוטומטית
+    if (localStorage.getItem("paid") === "true") {
+      enableLogoUpload();
+    }
   </script>
-
-  
 </body>
 </html>
