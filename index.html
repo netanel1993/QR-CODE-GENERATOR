@@ -2,39 +2,34 @@
 <html lang="he">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKZDZ9CJ1E">
-    // שילוב לוגו בתוך קוד ה-QR
-    document.getElementById('logoInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKZDZ9CJ1E">$1
+<script>
+// שילוב לוגו בתוך קוד ה-QR
+  document.getElementById('logoInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const logoImg = new Image();
-        logoImg.src = e.target.result;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const logoImg = new Image();
+      logoImg.src = e.target.result;
 
-        logoImg.onload = function() {
-          const container = document.getElementById('qrcode');
-          const canvas = container.querySelector('canvas');
-          if (!canvas) return alert("אנא צור קוד QR קודם");
+      logoImg.onload = function() {
+        const container = document.getElementById('qrcode');
+        const canvas = container.querySelector('canvas');
+        if (!canvas) return alert("אנא צור קוד QR קודם");
 
-          const ctx = canvas.getContext('2d');
-          const size = canvas.width / 4;
-          const x = (canvas.width - size) / 2;
-          const y = (canvas.height - size) / 2;
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width / 4;
+        const x = (canvas.width - size) / 2;
+        const y = (canvas.height - size) / 2;
 
-          ctx.drawImage(logoImg, x, y, size, size);
-        };
+        ctx.drawImage(logoImg, x, y, size, size);
       };
-      reader.readAsDataURL(file);
-    });
-$1
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KKZDZ9CJ1E');
-  </script>
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
   <link rel="icon" href="favicon_qr_styled.ico" type="image/x-icon">
   <meta name="google-site-verification" content="CjgW6uB7WUIDHzTDNw2mN2zSgW_KwudTBFLPGhoAlf0" />
   <meta charset="UTF-8">
