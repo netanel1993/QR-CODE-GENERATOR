@@ -171,10 +171,9 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      setTimeout(() => {
-        if (logoDataUrl) {
-          const canvas = container.querySelector('canvas');
-          if (!canvas) return;
+      const observer = new MutationObserver(() => {
+        const canvas = container.querySelector('canvas');
+        if (canvas && logoDataUrl) {
           const ctx = canvas.getContext('2d');
           const logoImg = new Image();
           logoImg.src = logoDataUrl;
@@ -184,8 +183,10 @@
             const y = (canvas.height - size) / 2;
             ctx.drawImage(logoImg, x, y, size, size);
           };
+          observer.disconnect();
         }
-      }, 300);
+      });
+      observer.observe(container, { childList: true });
     }
 
     document.getElementById('logoInput').addEventListener('change', function(event) {
@@ -195,19 +196,6 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         logoDataUrl = e.target.result;
-        const container = document.getElementById('qrcode');
-        const canvas = container.querySelector('canvas');
-        if (!canvas) return;
-
-        const logoImg = new Image();
-        logoImg.src = logoDataUrl;
-        logoImg.onload = function() {
-          const ctx = canvas.getContext('2d');
-          const size = canvas.width / 4;
-          const x = (canvas.width - size) / 2;
-          const y = (canvas.height - size) / 2;
-          ctx.drawImage(logoImg, x, y, size, size);
-        };
       };
       reader.readAsDataURL(file);
     });
