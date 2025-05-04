@@ -261,5 +261,31 @@
       אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית. מחולל QR איכותי בעברית – פשוט, חינמי ומהיר.
     </p>
   </div>
+<script>
+  document.getElementById('logoInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const logoImg = new Image();
+      logoImg.src = e.target.result;
+
+      logoImg.onload = function() {
+        const container = document.getElementById('qrcode');
+        const canvas = container.querySelector('canvas');
+        if (!canvas) return alert("אנא צור קוד QR קודם");
+
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width / 4;
+        const x = (canvas.width - size) / 2;
+        const y = (canvas.height - size) / 2;
+
+        ctx.drawImage(logoImg, x, y, size, size);
+      };
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
 </body>
 </html>
