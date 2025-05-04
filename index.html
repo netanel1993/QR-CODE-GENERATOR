@@ -150,9 +150,26 @@
   <br>
   <button onclick="downloadQR()">⬇️ הורד QR</button>
   <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
+
+  <!-- סקריפט מתוקן עם תמיכה בלוגו בתצוגה -->
   <script>
     let qrCode;
     let logoDataUrl = null;
+
+    function addLogoToCanvas() {
+      const canvas = document.querySelector('#qrcode canvas');
+      if (!canvas || !logoDataUrl) return;
+
+      const ctx = canvas.getContext('2d');
+      const logoImg = new Image();
+      logoImg.src = logoDataUrl;
+      logoImg.onload = function () {
+        const size = canvas.width / 4;
+        const x = (canvas.width - size) / 2;
+        const y = (canvas.height - size) / 2;
+        ctx.drawImage(logoImg, x, y, size, size);
+      };
+    }
 
     function generateQR() {
       const container = document.getElementById('qrcode');
@@ -171,22 +188,7 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      const observer = new MutationObserver(() => {
-        const canvas = container.querySelector('canvas');
-        if (canvas && logoDataUrl) {
-          const ctx = canvas.getContext('2d');
-          const logoImg = new Image();
-          logoImg.src = logoDataUrl;
-          logoImg.onload = function () {
-            const size = canvas.width / 4;
-            const x = (canvas.width - size) / 2;
-            const y = (canvas.height - size) / 2;
-            ctx.drawImage(logoImg, x, y, size, size);
-          };
-          observer.disconnect();
-        }
-      });
-      observer.observe(container, { childList: true });
+      setTimeout(addLogoToCanvas, 100);
     }
 
     document.getElementById('logoInput').addEventListener('change', function(event) {
@@ -196,6 +198,7 @@
       const reader = new FileReader();
       reader.onload = function(e) {
         logoDataUrl = e.target.result;
+        addLogoToCanvas(); // במקרה שכבר יש QR מוצג
       };
       reader.readAsDataURL(file);
     });
@@ -228,6 +231,7 @@
       if (payLink) payLink.style.display = "none";
     }
   </script>
+
   <div id="text-section" style="max-width: 700px; margin: 60px auto 20px auto; text-align: right; font-size: 1.1em;">
     <h2 style="margin-bottom: 10px;">מהו מחולל QR ולמה להשתמש בו?</h2>
     <p>
