@@ -162,7 +162,7 @@
       const bgColor = document.getElementById('bgColor').value;
       if (text.trim() === "") return;
 
-      qrCode = new QRCode(container, {
+      new QRCode(container, {
         text: text,
         width: 256,
         height: 256,
@@ -171,19 +171,21 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      if (logoDataUrl) {
-        const logoImg = new Image();
-        logoImg.src = logoDataUrl;
-        logoImg.onload = function () {
+      setTimeout(() => {
+        if (logoDataUrl) {
           const canvas = container.querySelector('canvas');
           if (!canvas) return;
           const ctx = canvas.getContext('2d');
-          const size = canvas.width / 4;
-          const x = (canvas.width - size) / 2;
-          const y = (canvas.height - size) / 2;
-          ctx.drawImage(logoImg, x, y, size, size);
-        };
-      }
+          const logoImg = new Image();
+          logoImg.src = logoDataUrl;
+          logoImg.onload = function () {
+            const size = canvas.width / 4;
+            const x = (canvas.width - size) / 2;
+            const y = (canvas.height - size) / 2;
+            ctx.drawImage(logoImg, x, y, size, size);
+          };
+        }
+      }, 300);
     }
 
     document.getElementById('logoInput').addEventListener('change', function(event) {
@@ -238,7 +240,7 @@
       if (payLink) payLink.style.display = "none";
     }
   </script>
-<div id="text-section" style="max-width: 700px; margin: 60px auto 20px auto; text-align: right; font-size: 1.1em;">
+  <div id="text-section" style="max-width: 700px; margin: 60px auto 20px auto; text-align: right; font-size: 1.1em;">
     <h2 style="margin-bottom: 10px;">מהו מחולל QR ולמה להשתמש בו?</h2>
     <p>
       מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים תוך שניות – ללא צורך בהרשמה. השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.
