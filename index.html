@@ -2,35 +2,13 @@
 <html lang="he">
 <head>
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKZDZ9CJ1E">$1
-<script>
-// שילוב לוגו בתוך קוד ה-QR
-  document.getElementById('logoInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const logoImg = new Image();
-      logoImg.src = e.target.result;
-
-      logoImg.onload = function() {
-        const container = document.getElementById('qrcode');
-        const canvas = container.querySelector('canvas');
-        if (!canvas) return alert("אנא צור קוד QR קודם");
-
-        const ctx = canvas.getContext('2d');
-        const size = canvas.width / 4;
-        const x = (canvas.width - size) / 2;
-        const y = (canvas.height - size) / 2;
-
-        ctx.drawImage(logoImg, x, y, size, size);
-        currentLogo = logoImg;
-      };
-    };
-    reader.readAsDataURL(file);
-  });
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKZDZ9CJ1E"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KKZDZ9CJ1E');
+  </script>
   <link rel="icon" href="favicon_qr_styled.ico" type="image/x-icon">
   <meta name="google-site-verification" content="CjgW6uB7WUIDHzTDNw2mN2zSgW_KwudTBFLPGhoAlf0" />
   <meta charset="UTF-8">
@@ -57,17 +35,6 @@
       font-size: 2.6em;
       margin-bottom: 10px;
       text-shadow: 1px 1px 3px #aaa;
-    }
-    .welcome-heading {
-      font-size: 2em;
-      color: #5e35b1;
-      margin-bottom: 5px;
-      animation: fadeIn 1.2s ease-in-out;
-      text-shadow: 1px 1px 3px #bbb;
-    }
-    body.dark-mode .welcome-heading {
-      color: #bb86fc;
-      text-shadow: 1px 1px 3px #222;
     }
     .form-group, #upload-logo {
       background: #ffffffee;
@@ -157,50 +124,39 @@
 </head>
 <body>
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌓 מצב כהה</button>
-
-    <h1>מחולל QR עם לוגו</h1>
-  <div style="background: #ffe5e5; border: 1px solid #d32f2f; border-radius: 12px; padding: 14px; margin: 10px auto 20px auto; max-width: 480px; box-shadow: 0 0 12px rgba(211, 47, 47, 0.4); animation: fadeIn 1.5s ease-in-out;">
-  <p style="font-size: 1.2em; color: #444; margin: 0;">
+  <h1>מחולל QR עם לוגו</h1>
+  <div style="background-color:#ffcdd2; border-radius:12px; padding:14px; max-width:720px; margin:0 auto 25px auto; font-size:1.15em; font-weight:bold; box-shadow: 0 0 10px rgba(0,0,0,0.08);">
     בין אם יש לך עסק, אירוע או רעיון – זה הזמן להפוך כל לינק פשוט לקוד QR מעוצב ובלתי נשכח.<br>
     הוסף צבע, רקע ולוגו אישי – והפוך כל סריקה לחוויה מקצועית שמושכת תשומת לב.
-  </p>
-</div>
-
+  </div>
   <div class="form-group">
     <input type="text" id="text" placeholder="הכנס טקסט או קישור ל־QR">
   </div>
-
   <div class="form-group">
     <label>צבע QR: <input type="color" id="qrColor" value="#000000"></label>
     <label>צבע רקע: <input type="color" id="bgColor" value="#ffffff"></label>
   </div>
-
   <button onclick="generateQR()">🎯 צור קוד QR</button>
   <div id="qrcode"></div>
-
   <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">💰 הוסף לוגו (₪9.90)</a>
-  <div class="logo-benefit" style="background-color: #1c1c1c; border: 1px solid #444; color: #ffeb3b;">
+  <div class="logo-benefit">
     הוספת לוגו תשדרג את המיתוג שלך – תגרום לקוד להיראות יוקרתי, מושך ומקצועי.<br>
     השקעה חד־פעמית קטנה שתשאיר רושם גדול בכל סריקה!
   </div>
-
   <div id="upload-logo">
     <input type="file" id="logoInput" accept="image/*">
     <p>📎 העלאת לוגו תשלב אותו בתוך ה־QR</p>
   </div>
-
   <br>
   <button onclick="downloadQR()">⬇️ הורד QR</button>
   <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
-
   <script>
     let qrCode;
-let currentLogo = null;
+    let logoDataUrl = null;
 
-function generateQR() {
+    function generateQR() {
       const container = document.getElementById('qrcode');
       container.innerHTML = "";
-      currentLogo = currentLogo || null;
       const text = document.getElementById('text').value;
       const color = document.getElementById('qrColor').value;
       const bgColor = document.getElementById('bgColor').value;
@@ -215,17 +171,44 @@ function generateQR() {
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      if (currentLogo) {
-        setTimeout(() => {
+      if (logoDataUrl) {
+        const logoImg = new Image();
+        logoImg.src = logoDataUrl;
+        logoImg.onload = function () {
           const canvas = container.querySelector('canvas');
+          if (!canvas) return;
           const ctx = canvas.getContext('2d');
           const size = canvas.width / 4;
           const x = (canvas.width - size) / 2;
           const y = (canvas.height - size) / 2;
-          ctx.drawImage(currentLogo, x, y, size, size);
-        }, 100);
+          ctx.drawImage(logoImg, x, y, size, size);
+        };
       }
     }
+
+    document.getElementById('logoInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        logoDataUrl = e.target.result;
+        const container = document.getElementById('qrcode');
+        const canvas = container.querySelector('canvas');
+        if (!canvas) return;
+
+        const logoImg = new Image();
+        logoImg.src = logoDataUrl;
+        logoImg.onload = function() {
+          const ctx = canvas.getContext('2d');
+          const size = canvas.width / 4;
+          const x = (canvas.width - size) / 2;
+          const y = (canvas.height - size) / 2;
+          ctx.drawImage(logoImg, x, y, size, size);
+        };
+      };
+      reader.readAsDataURL(file);
+    });
 
     function downloadQR() {
       const container = document.getElementById('qrcode');
@@ -255,51 +238,26 @@ function generateQR() {
       if (payLink) payLink.style.display = "none";
     }
   </script>
-
-  <div id="text-section">
-    <p style="font-size: 1.1em; max-width: 700px; margin: 40px auto 20px auto; text-align: right;">
-      <span style="display:inline-block; background:#fff8e1; border:1px solid #ffc107; padding:10px 14px; border-radius:8px; font-weight:bold; color:#b36b00;">למה כדאי לשדרג ללוגו ב־₪9.90? כי זה מה שהופך את ה־QR שלך לממותג, מקצועי ובולט – במיוחד בעיני לקוחות חדשים!</span></p>
-    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 20px auto; text-align: right;">
+<div id="text-section" style="max-width: 700px; margin: 60px auto 20px auto; text-align: right; font-size: 1.1em;">
+    <h2 style="margin-bottom: 10px;">מהו מחולל QR ולמה להשתמש בו?</h2>
+    <p>
+      מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים תוך שניות – ללא צורך בהרשמה. השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.
+    </p>
+    <p>
       מחולל ה־QR שלנו מתאים במיוחד לבעלי עסקים, יוצרי תוכן, מארגני אירועים וכל מי שמעוניין ביצירת קוד QR עם מיתוג אישי הכולל גם לוגו. הקוד עובד בכל סורק QR סטנדרטי ונראה מצוין גם על כרטיסי ביקור, פליירים, אריזות מוצרים, מדבקות, ועוד.
     </p>
-    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 20px auto; text-align: right;">
+    <p>
       בשונה מכלים פשוטים אחרים, מחולל QR זה כולל אפשרויות עיצוב מתקדמות כמו בחירת צבעים, הוספת לוגו עסקי, ושמירת הקוד באיכות גבוהה (PNG) להורדה או שיתוף מיידי ב־WhatsApp וב־Facebook.
     </p>
-    <ul style="text-align: right; max-width: 700px; margin: 0 auto 20px auto;">
+    <ul>
       <li>לבעלי עסקים קטנים המעוניינים להוסיף קוד QR עם לוגו על מוצרים</li>
       <li>ליזמים בתחום האיקומרס המחפשים כלי להפניית לקוחות לדף מוצר</li>
       <li>לאנשים פרטיים המעוניינים לייצר קוד QR לאירוע, חתונה או מסיבה</li>
       <li>למשווקים דיגיטליים המעוניינים ב־QR לפרסום ברשתות החברתיות</li>
     </ul>
-    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 30px auto; text-align: right;">
+    <p>
       אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית. מחולל QR איכותי בעברית – פשוט, חינמי ומהיר.
     </p>
   </div>
-<script>
-  document.getElementById('logoInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const logoImg = new Image();
-      logoImg.src = e.target.result;
-
-      logoImg.onload = function() {
-        const container = document.getElementById('qrcode');
-        const canvas = container.querySelector('canvas');
-        if (!canvas) return alert("אנא צור קוד QR קודם");
-
-        const ctx = canvas.getContext('2d');
-        const size = canvas.width / 4;
-        const x = (canvas.width - size) / 2;
-        const y = (canvas.height - size) / 2;
-
-        ctx.drawImage(logoImg, x, y, size, size);
-      };
-    };
-    reader.readAsDataURL(file);
-  });
-</script>
 </body>
 </html>
