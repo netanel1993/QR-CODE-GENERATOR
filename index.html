@@ -20,78 +20,52 @@
     body {
       direction: rtl;
       font-family: 'Varela Round', sans-serif;
-      background: linear-gradient(135deg, #fff8dc, #fceabb);
+      background: linear-gradient(135deg, #fff7e6, #ffe4e1);
       text-align: center;
       padding: 30px;
       color: #2e3d49;
-      animation: fadeIn 1.5s ease-in-out;
-    }
-    body.dark-mode {
-      background: #121212;
-      color: #ffffff;
     }
     h1 {
-      color: #4a148c;
+      color: #b8860b;
       font-size: 2.6em;
-      margin-bottom: 10px;
-      text-shadow: 1px 1px 3px #aaa;
     }
-    .form-group, #upload-logo {
-      background: #ffffffee;
-      border-radius: 14px;
-      padding: 20px;
-      margin: 10px auto;
-      width: 90%;
-      max-width: 440px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.12);
+    .form-group {
+      margin: 20px auto;
     }
-    body.dark-mode .form-group, body.dark-mode #upload-logo {
-      background: #1e1e1e;
-    }
-    input[type="text"] {
-      width: 92%;
-      padding: 12px;
-      font-size: 1.05em;
-      border: 1px solid #ccc;
+    input[type="text"], input[type="color"] {
+      padding: 10px;
+      font-size: 1em;
+      margin: 5px;
       border-radius: 8px;
     }
-    input[type="color"] {
-      margin: 0 8px;
-    }
-    button, a#pay-link {
-      background-color: #6a1b9a;
+    button, .pay-link {
+      background: #6a1b9a;
       color: white;
       border: none;
-      padding: 12px 25px;
-      margin: 10px 5px;
+      padding: 10px 20px;
       border-radius: 8px;
       font-size: 1em;
       cursor: pointer;
+      margin: 10px;
       text-decoration: none;
       display: inline-block;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    button:hover, a#pay-link:hover {
-      background-color: #4a148c;
-      transform: translateY(-2px);
-    }
-    #qrcode {
-      margin: 25px auto;
-    }
-    #upload-logo {
-      display: none;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     #qrcode canvas {
+      margin-top: 20px;
       box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
       border-radius: 10px;
-      transition: transform 0.3s ease;
     }
-    #qrcode canvas:hover {
-      transform: scale(1.07);
+    .logo-benefit {
+      background-color: #2c2c2c;
+      color: #ffeb3b;
+      padding: 14px;
+      border-radius: 10px;
+      margin: 20px auto;
+      font-size: 1.1em;
+      max-width: 600px;
+    }
+    #logoInput {
+      display: none;
     }
     .dark-toggle {
       position: fixed;
@@ -103,151 +77,141 @@
       padding: 10px 15px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9em;
-    }
-    .logo-benefit {
-      background-color: #fff3cd;
-      border: 1px solid #ffeeba;
-      color: #856404;
-      padding: 12px;
-      border-radius: 8px;
-      margin: 10px auto;
-      max-width: 550px;
-      font-weight: bold;
-    }
-    body.dark-mode .logo-benefit {
-      background-color: #2c2c2c;
-      border-color: #444;
-      color: #ffeb3b;
     }
   </style>
 </head>
 <body>
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌓 מצב כהה</button>
+
   <h1>מחולל QR עם לוגו</h1>
-  <div style="background-color:#ffcdd2; border-radius:12px; padding:14px; max-width:720px; margin:0 auto 25px auto; font-size:1.15em; font-weight:bold; box-shadow: 0 0 10px rgba(0,0,0,0.08);">
-    בין אם יש לך עסק, אירוע או רעיון – זה הזמן להפוך כל לינק פשוט לקוד QR מעוצב ובלתי נשכח.<br>
-    הוסף צבע, רקע ולוגו אישי – והפוך כל סריקה לחוויה מקצועית שמושכת תשומת לב.
-  </div>
+
   <div class="form-group">
     <input type="text" id="text" placeholder="הכנס טקסט או קישור ל־QR">
-  </div>
-  <div class="form-group">
+    <br>
     <label>צבע QR: <input type="color" id="qrColor" value="#000000"></label>
     <label>צבע רקע: <input type="color" id="bgColor" value="#ffffff"></label>
   </div>
+
   <button onclick="generateQR()">🎯 צור קוד QR</button>
+  <button onclick="downloadQR()">⬇️ הורד QR</button>
+  <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
+
   <div id="qrcode"></div>
-  <a id="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">💰 הוסף לוגו (₪9.90)</a>
+
+  <a class="pay-link" href="https://www.paypal.com/donate/?hosted_button_id=6TS7T3778TGEA&return=success.html" target="_blank">
+    💰 הוסף לוגו מקצועי (₪9.90 בלבד)
+  </a>
+
   <div class="logo-benefit">
     הוספת לוגו תשדרג את המיתוג שלך – תגרום לקוד להיראות יוקרתי, מושך ומקצועי.<br>
     השקעה חד־פעמית קטנה שתשאיר רושם גדול בכל סריקה!
   </div>
-  <div id="upload-logo">
-    <input type="file" id="logoInput" accept="image/*">
-    <p>📎 העלאת לוגו תשלב אותו בתוך ה־QR</p>
-  </div>
-  <br>
-  <button onclick="downloadQR()">⬇️ הורד QR</button>
-  <button onclick="shareOnWhatsApp()">📲 שתף ב־WhatsApp</button>
-  <script>
-    let qrCode;
-    let logoDataUrl = null;
 
-    function generateQR() {
-      const container = document.getElementById('qrcode');
-      container.innerHTML = "";
-      const text = document.getElementById('text').value;
-      const color = document.getElementById('qrColor').value;
-      const bgColor = document.getElementById('bgColor').value;
-      if (text.trim() === "") return;
+  <input type="file" id="logoInput" accept="image/*">
 
-      new QRCode(container, {
-        text: text,
-        width: 256,
-        height: 256,
-        colorDark: color,
-        colorLight: bgColor,
-        correctLevel: QRCode.CorrectLevel.H
-      });
-
-      const observer = new MutationObserver(() => {
-        const canvas = container.querySelector('canvas');
-        if (canvas && logoDataUrl) {
-          const ctx = canvas.getContext('2d');
-          const logoImg = new Image();
-          logoImg.src = logoDataUrl;
-          logoImg.onload = function () {
-            const size = canvas.width / 4;
-            const x = (canvas.width - size) / 2;
-            const y = (canvas.height - size) / 2;
-            ctx.drawImage(logoImg, x, y, size, size);
-          };
-          observer.disconnect();
-        }
-      });
-      observer.observe(container, { childList: true });
-    }
-
-    document.getElementById('logoInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        logoDataUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    function downloadQR() {
-      const container = document.getElementById('qrcode');
-      const qrImg = container.querySelector('canvas');
-      if (!qrImg) return alert("אנא צור קוד QR קודם");
-
-      const image = qrImg.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = 'qrcode.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function shareOnWhatsApp() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) return alert("לא ניתן לשתף קוד ריק");
-      const url = encodeURIComponent(text);
-      const whatsappLink = `https://wa.me/?text=${url}`;
-      window.open(whatsappLink, '_blank');
-    }
-
-    if (localStorage.getItem("paid") === "true") {
-      document.getElementById("upload-logo").style.display = "block";
-      const payLink = document.getElementById("pay-link");
-      if (payLink) payLink.style.display = "none";
-    }
-  </script>
-  <div id="text-section" style="max-width: 700px; margin: 60px auto 20px auto; text-align: right; font-size: 1.1em;">
-    <h2 style="margin-bottom: 10px;">מהו מחולל QR ולמה להשתמש בו?</h2>
-    <p>
-      מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים תוך שניות – ללא צורך בהרשמה. השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.
-    </p>
-    <p>
-      מחולל ה־QR שלנו מתאים במיוחד לבעלי עסקים, יוצרי תוכן, מארגני אירועים וכל מי שמעוניין ביצירת קוד QR עם מיתוג אישי הכולל גם לוגו. הקוד עובד בכל סורק QR סטנדרטי ונראה מצוין גם על כרטיסי ביקור, פליירים, אריזות מוצרים, מדבקות, ועוד.
-    </p>
-    <p>
-      בשונה מכלים פשוטים אחרים, מחולל QR זה כולל אפשרויות עיצוב מתקדמות כמו בחירת צבעים, הוספת לוגו עסקי, ושמירת הקוד באיכות גבוהה (PNG) להורדה או שיתוף מיידי ב־WhatsApp וב־Facebook.
-    </p>
+  <div id="text-section" style="max-width: 700px; margin: 40px auto; text-align: right; font-size: 1.1em;">
+    <strong>מהו מחולל QR ולמה להשתמש בו?</strong><br>
+    מחולל QR הוא כלי שמאפשר לך ליצור קוד QR באופן מיידי. בעזרת הכלי שלנו תוכל להפיק קודי QR מעוצבים, אישיים ומקצועיים תוך שניות – ללא צורך בהרשמה.
+    השתמש בקוד QR כדי לשתף קישורים, טקסטים, פרטי יצירת קשר, לינקים לרשתות חברתיות, ועוד.<br><br>
+    מחולל ה־QR שלנו מתאים במיוחד לבעלי עסקים, יוצרי תוכן, מארגני אירועים וכל מי שמעוניין ביצירת קוד QR עם מיתוג אישי הכולל גם לוגו.
+    הקוד עובד בכל סורק QR סטנדרטי ונראה מצוין גם על כרטיסי ביקור, פליירים, אריזות מוצרים, מדבקות, ועוד.<br><br>
+    בשונה מכלים פשוטים אחרים, מחולל QR זה כולל אפשרויות עיצוב מתקדמות כמו בחירת צבעים, הוספת לוגו עסקי, ושמירת הקוד באיכות גבוהה (PNG) להורדה או שיתוף מיידי ב־WhatsApp וב־Facebook.<br><br>
     <ul>
       <li>לבעלי עסקים קטנים המעוניינים להוסיף קוד QR עם לוגו על מוצרים</li>
       <li>ליזמים בתחום האיקומרס המחפשים כלי להפניית לקוחות לדף מוצר</li>
       <li>לאנשים פרטיים המעוניינים לייצר קוד QR לאירוע, חתונה או מסיבה</li>
       <li>למשווקים דיגיטליים המעוניינים ב־QR לפרסום ברשתות החברתיות</li>
     </ul>
-    <p>
-      אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית. מחולל QR איכותי בעברית – פשוט, חינמי ומהיר.
-    </p>
+    אל תחכה! צור קוד QR עכשיו בעיצוב אישי והתחל להשתמש בו מיידית. מחולל QR איכותי בעברית – פשוט, חינמי ומהיר.
   </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      let logoDataUrl = null;
+
+      function drawLogoOnQR(canvas) {
+        if (!canvas || !logoDataUrl) return;
+        const ctx = canvas.getContext('2d');
+        const logoImg = new Image();
+        logoImg.src = logoDataUrl;
+        logoImg.onload = () => {
+          const size = canvas.width / 4;
+          const x = (canvas.width - size) / 2;
+          const y = (canvas.height - size) / 2;
+          ctx.drawImage(logoImg, x, y, size, size);
+        };
+      }
+
+      function generateQR() {
+        const container = document.getElementById('qrcode');
+        container.innerHTML = "";
+        const text = document.getElementById('text').value;
+        const color = document.getElementById('qrColor').value;
+        const bgColor = document.getElementById('bgColor').value;
+        if (text.trim() === "") return;
+
+        const qr = new QRCode(container, {
+          text: text,
+          width: 256,
+          height: 256,
+          colorDark: color,
+          colorLight: bgColor,
+          correctLevel: QRCode.CorrectLevel.H
+        });
+
+        const observer = new MutationObserver(() => {
+          const canvas = container.querySelector('canvas');
+          if (canvas) drawLogoOnQR(canvas);
+          observer.disconnect();
+        });
+        observer.observe(container, { childList: true });
+      }
+
+      function downloadQR() {
+        const canvas = document.querySelector('#qrcode canvas');
+        if (!canvas) return alert("אנא צור קוד QR קודם");
+        const image = canvas.toDataURL("image/png");
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'qrcode.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function shareOnWhatsApp() {
+        const text = document.getElementById('text').value.trim();
+        if (!text) return alert("לא ניתן לשתף קוד ריק");
+        const url = encodeURIComponent(text);
+        const whatsappLink = `https://wa.me/?text=${url}`;
+        window.open(whatsappLink, '_blank');
+      }
+
+      const paid = localStorage.getItem("paid") === "true";
+      if (paid) {
+        document.getElementById('logoInput').style.display = 'block';
+      }
+
+      const logoInput = document.getElementById('logoInput');
+      logoInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          logoDataUrl = e.target.result;
+          const canvas = document.querySelector('#qrcode canvas');
+          if (canvas) {
+            drawLogoOnQR(canvas);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+
+      window.generateQR = generateQR;
+      window.downloadQR = downloadQR;
+      window.shareOnWhatsApp = shareOnWhatsApp;
+    });
+  </script>
 </body>
 </html>
