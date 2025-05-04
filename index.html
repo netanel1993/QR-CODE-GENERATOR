@@ -25,6 +25,7 @@
         const y = (canvas.height - size) / 2;
 
         ctx.drawImage(logoImg, x, y, size, size);
+        currentLogo = logoImg;
       };
     };
     reader.readAsDataURL(file);
@@ -194,10 +195,12 @@
 
   <script>
     let qrCode;
+let currentLogo = null;
 
-    function generateQR() {
+function generateQR() {
       const container = document.getElementById('qrcode');
       container.innerHTML = "";
+      currentLogo = currentLogo || null;
       const text = document.getElementById('text').value;
       const color = document.getElementById('qrColor').value;
       const bgColor = document.getElementById('bgColor').value;
@@ -211,6 +214,17 @@
         colorLight: bgColor,
         correctLevel: QRCode.CorrectLevel.H
       });
+
+      if (currentLogo) {
+        setTimeout(() => {
+          const canvas = container.querySelector('canvas');
+          const ctx = canvas.getContext('2d');
+          const size = canvas.width / 4;
+          const x = (canvas.width - size) / 2;
+          const y = (canvas.height - size) / 2;
+          ctx.drawImage(currentLogo, x, y, size, size);
+        }, 100);
+      }
     }
 
     function downloadQR() {
